@@ -135,7 +135,9 @@ public class AppBuilder {
         final LogoutInputBoundary logoutInteractor = new LogoutInteractor(userService, logoutOutputBoundary);
 
         final LogoutController logoutController = new LogoutController(logoutInteractor);
+
         logoutView.setLogoutController(logoutController);
+
         return this;
     }
     public AppBuilder addGridUseCase() {
