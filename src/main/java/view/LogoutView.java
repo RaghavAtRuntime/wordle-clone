@@ -30,7 +30,6 @@ public class LogoutView extends JPanel implements PropertyChangeListener {
 
 
     private LogoutController logoutController;
-//    private HistoryController historyController;
 
 
     public LogoutView(LogoutViewModel logoutViewModel, UserService userService) {
@@ -46,8 +45,6 @@ public class LogoutView extends JPanel implements PropertyChangeListener {
         int wins = userService.getUserWins(userService.getCurrentUsername());
         int losses = userService.getUserLosses(userService.getCurrentUsername());
 
-//        int wins = logoutController.getuserstat().get("Win");
-//        int losses = logoutController.getuserstat().get("Loss");
 
 //        Calculate the winning rate
         double winRate = (wins + losses > 0) ? ((double) wins / (wins + losses)) * 100 : 0;
