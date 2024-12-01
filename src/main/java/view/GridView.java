@@ -111,17 +111,21 @@ public class GridView extends JPanel implements PropertyChangeListener {
      */
     private void updateGrid(GridState state) {
         for (int row = 0; row < gridCells.length; row++) {
-            for (int col = 0; col < gridCells[row].length; col++) {
-                String letter = state.getCellContent(row, col);
-                gridCells[row][col].setText(letter);
+            positionCheck(state, row);
+        }
+    }
 
-                if (state.isCellCorrectPosition(row, col)) {
-                    gridCells[row][col].setBackground(Color.GREEN); // Correct letter, correct position
-                } else if (state.isCellCorrectLetter(row, col)) {
-                    gridCells[row][col].setBackground(Color.ORANGE); // Correct letter, incorrect position
-                } else {
-                    gridCells[row][col].setBackground(Color.GRAY); // Incorrect letter
-                }
+    private void positionCheck(GridState state, int row) {
+        for (int col = 0; col < gridCells[row].length; col++) {
+            String letter = state.getCellContent(row, col);
+            gridCells[row][col].setText(letter);
+
+            if (state.isCellCorrectPosition(row, col)) {
+                gridCells[row][col].setBackground(Color.GREEN); // Correct letter, correct position
+            } else if (state.isCellCorrectLetter(row, col)) {
+                gridCells[row][col].setBackground(Color.ORANGE); // Correct letter, incorrect position
+            } else {
+                gridCells[row][col].setBackground(Color.GRAY); // Incorrect letter
             }
         }
     }
@@ -210,30 +214,36 @@ public class GridView extends JPanel implements PropertyChangeListener {
             GuessResult guessResult = gridController.checkWord(guessedWord.toString());
 
             // Update cell backgrounds based on feedback
-            for (int col = 0; col < guessResult.getCellResults().size(); col++) {
-                CellResult cellResult = guessResult.getCellResults().get(col);
-
-                if (cellResult.isCorrectPosition()) {
-                    gridCells[row][col].setBackground(Color.GREEN);
-                } else if (cellResult.isCorrectLetter()) {
-                    gridCells[row][col].setBackground(Color.ORANGE);
-                } else {
-                    gridCells[row][col].setBackground(Color.GRAY);
-                }
-            }
+            backgorundUpdate(row, guessResult);
 
             if (guessResult.isCorrect()) {
-                gridController.recordGameResult(true);
-                JOptionPane.showMessageDialog(this, "Congratulations! You guessed the word!");
-                gridController.switchToGameEndView();
+                present(true, "Congratulations! You guessed the word!");
             } else if (row == gridCells.length - 1) {
-                gridController.recordGameResult(false);
-                JOptionPane.showMessageDialog(this, "Game Over! Try again!" );
-                gridController.switchToGameEndView();
+                present(false, "Game Over! Try again!");
             } else {
                 focusNextRow(row + 1);
             }
 
+        }
+    }
+
+    private void present(boolean userWon, String message) {
+        gridController.recordGameResult(userWon);
+        JOptionPane.showMessageDialog(this, message);
+        gridController.switchToGameEndView();
+    }
+
+    private void backgorundUpdate(int row, GuessResult guessResult) {
+        for (int col = 0; col < guessResult.getCellResults().size(); col++) {
+            CellResult cellResult = guessResult.getCellResults().get(col);
+
+            if (cellResult.isCorrectPosition()) {
+                gridCells[row][col].setBackground(Color.GREEN);
+            } else if (cellResult.isCorrectLetter()) {
+                gridCells[row][col].setBackground(Color.ORANGE);
+            } else {
+                gridCells[row][col].setBackground(Color.GRAY);
+            }
         }
     }
 
