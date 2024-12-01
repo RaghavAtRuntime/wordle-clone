@@ -60,4 +60,8 @@ public class GridController {
     public void recordGameResult(boolean userWon){
         gridInteractor.recordGameResult(userWon);
     }
+
+    public void handleEnter(int row, String letter) {
+        gridInteractor.handleEnter(row, letter);
+    }
 }

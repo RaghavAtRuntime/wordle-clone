@@ -15,6 +15,7 @@ public interface GridInputBoundary {
     GuessResult checkGuess(String guessedWord);
 
     void recordGameResult(boolean userWon);
+    void handleEnter(int row, String guessedWord);
 }
 
 

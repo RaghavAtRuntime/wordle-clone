@@ -47,6 +47,10 @@ public class GridViewModel extends ViewModel<GridState> {
         support.firePropertyChange("cellContent", null, getState());
     }
 
+    public String getCellContent(int row, int col) {
+        return getState().getCellContent(row, col);
+    }
+
     public void setCellCorrectPosition(int row, int col, boolean isCorrect) {
         // Assuming GridState has a method to set correct position
         getState().setCellCorrectPosition(row, col, isCorrect);
@@ -76,4 +80,21 @@ public class GridViewModel extends ViewModel<GridState> {
         setState(new GridState());
         support.firePropertyChange("reset", null, getState());
     }
+
+    public int getCurrentRow() {
+        for (int row = 0; row < 6; row++) {
+            boolean isRowEmpty = true;
+            for (int col = 0; col < 5; col++) {
+                if (!getCellContent(row, col).isEmpty()) {
+                    isRowEmpty = false;
+                    break;
+                }
+            }
+            if (isRowEmpty) {
+                return row; // Return the first empty row
+            }
+        }
+        return 6; // All rows filled, return a value beyond the grid
+    }
+
 }

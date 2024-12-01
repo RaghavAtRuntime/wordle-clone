@@ -7,4 +7,10 @@ public interface GridOutputBoundary {
     void switchToGameEndView();
 
     void presentGuessResult(GuessResult result);
+
+    void presentLoss(GuessResult result);
+    void presentWin(GuessResult result);
+    void resetGridView();
+
+
 }

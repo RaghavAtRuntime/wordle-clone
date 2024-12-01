@@ -16,42 +16,37 @@ public class GridInteractor implements GridInputBoundary {
     }
 
     @Override
+    public void execute(GridInputData gridInputData) {
+        GuessResult result = checkGuess(gridInputData.getGuess());
+        gridPresenter.presentGuessResult(result);
+    }
+
+    @Override
     public void switchToGameEndView() {
         gridPresenter.switchToGameEndView();
     }
 
     @Override
-    public void execute(GridInputData gridInputData) {
-        GuessResult result = checkGuess(gridInputData.getGuess());
-        gridPresenter.presentGuessResult(result);
-    }
-    @Override
     public GuessResult checkGuess(String guess) {
-        // Retrieve the current game state
         GameState gameState = gameRepository.getGameState();
-        // Reduce number of remaining attempts
         gameState.setRemainingAttempts(gameState.getRemainingAttempts() - 1);
-        // Logic to check the guess
         GuessResult result = gameState.checkGuess(guess);
-        // Save the updated game state
         gameRepository.saveGameState(gameState);
-
         return result;
     }
 
     @Override
-    public void recordGameResult(boolean userWon){
-        String currentUser = userService.getCurrentUsername();
-        if(userWon){
-            int currentWins = userService.getUserWins(currentUser);
-            userService.setUserWins(currentUser, currentWins+1);
-        }
-        else{
-            int currentLosses = userService.getUserLosses(currentUser);
-            userService.setUserLosses(currentUser, currentLosses+1);
-        }
+    public void recordGameResult(boolean userWon) {
+
     }
 
-
-
+    @Override
+    public void handleEnter(int row, String guessedWord) {
+        GuessResult result = checkGuess(guessedWord);
+        if (result.isCorrect()) {
+            gridPresenter.presentWin(result);
+        } else {
+            gridPresenter.presentGuessResult(result);
+        }
+    }
 }
